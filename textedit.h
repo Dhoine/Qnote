@@ -13,8 +13,6 @@ class QWidget;
 QT_END_NAMESPACE
 class LineNumberArea;
 
-//![texteditdefinition]
-
 class TextEdit: public QPlainTextEdit
 {
     Q_OBJECT
@@ -22,6 +20,8 @@ public:
     TextEdit(QWidget* parent=0);
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
+    QString saveFileAs();
+    void findText(QString, QTextDocument::FindFlags flag=QTextDocument::FindFlags());
     ~TextEdit();
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
@@ -43,11 +43,9 @@ signals:
 private:
     QWidget *lineNumberArea;
     bool isMod=false;
+    bool isFirstTime=true;
     QString fileName="null";
 };
-
-//![texteditdefinition]
-//![extraarea]
 
 class LineNumberArea : public QWidget
 {
@@ -68,8 +66,5 @@ protected:
 private:
     TextEdit *codeEditor;
 };
-
-//![extraarea]
-
 
 #endif // TEXTEDIT_H

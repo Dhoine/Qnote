@@ -1,6 +1,6 @@
 #include "highlighter.h"
 
-//! [0]
+
 Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
@@ -23,49 +23,36 @@ Highlighter::Highlighter(QTextDocument *parent)
         rule.pattern = QRegExp(pattern);
         rule.format = keywordFormat;
         highlightingRules.append(rule);
-//! [0] //! [1]
     }
-//! [1]
 
-//! [2]
     classFormat.setFontWeight(QFont::Bold);
     classFormat.setForeground(Qt::darkMagenta);
     rule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
     rule.format = classFormat;
     highlightingRules.append(rule);
-//! [2]
 
-//! [3]
     singleLineCommentFormat.setForeground(Qt::red);
     rule.pattern = QRegExp("//[^\n]*");
     rule.format = singleLineCommentFormat;
     highlightingRules.append(rule);
 
     multiLineCommentFormat.setForeground(Qt::red);
-//! [3]
 
-//! [4]
     quotationFormat.setForeground(Qt::darkGreen);
     rule.pattern = QRegExp("\".*\"");
     rule.format = quotationFormat;
     highlightingRules.append(rule);
-//! [4]
 
-//! [5]
     functionFormat.setFontItalic(true);
     functionFormat.setForeground(Qt::blue);
     rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
     rule.format = functionFormat;
     highlightingRules.append(rule);
-//! [5]
 
-//! [6]
     commentStartExpression = QRegExp("/\\*");
     commentEndExpression = QRegExp("\\*/");
 }
-//! [6]
 
-//! [7]
 void Highlighter::highlightBlock(const QString &text)
 {
     foreach (const HighlightingRule &rule, highlightingRules) {
@@ -77,18 +64,14 @@ void Highlighter::highlightBlock(const QString &text)
             index = expression.indexIn(text, index + length);
         }
     }
-//! [7] //! [8]
-    setCurrentBlockState(0);
-//! [8]
 
-//! [9]
+    setCurrentBlockState(0);
+
     int startIndex = 0;
     if (previousBlockState() != 1)
         startIndex = commentStartExpression.indexIn(text);
 
-//! [9] //! [10]
     while (startIndex >= 0) {
-//! [10] //! [11]
         int endIndex = commentEndExpression.indexIn(text, startIndex);
         int commentLength;
         if (endIndex == -1) {
@@ -102,4 +85,4 @@ void Highlighter::highlightBlock(const QString &text)
         startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
     }
 }
-//! [11]
+

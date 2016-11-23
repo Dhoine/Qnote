@@ -4,10 +4,11 @@
 #include <QtWidgets>
 #include <QErrorMessage>
 #include <QFileDialog>
+#include <QTextOption>
+#include <QTextCursor>
 #include "highlighter.h"
 #include "mainwindow.h"
 
-//![constructor]
 TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
 {
     this->setLineWrapMode(NoWrap);
@@ -16,16 +17,13 @@ TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
-    connect(this,SIGNAL(cursorPositionChanged()),this,SLOT(emitSize()));
+    connect(this, SIGNAL(cursorPositionChanged()),this,SLOT(emitSize()));
     connect(this, SIGNAL(modificationChanged(bool)),this, SLOT(setMod(bool)));
 
     Highlighter* highlighter = new Highlighter(this->document());
     emit blockCountChanged(0);
+    this->setFocus();
 }
-
-//![constructor]
-
-//![extraAreaWidth]
 
 int TextEdit::lineNumberAreaWidth()
 {
@@ -41,18 +39,10 @@ int TextEdit::lineNumberAreaWidth()
     return space;
 }
 
-//![extraAreaWidth]
-
-//![slotUpdateExtraAreaWidth]
-
 void TextEdit::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
-
-//![slotUpdateExtraAreaWidth]
-
-//![slotUpdateRequest]
 
 void TextEdit::updateLineNumberArea(const QRect &rect, int dy)
 {
@@ -65,10 +55,6 @@ void TextEdit::updateLineNumberArea(const QRect &rect, int dy)
         updateLineNumberAreaWidth(0);
 }
 
-//![slotUpdateRequest]
-
-//![resizeEvent]
-
 void TextEdit::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
@@ -76,10 +62,6 @@ void TextEdit::resizeEvent(QResizeEvent *e)
     QRect cr = contentsRect();
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
-
-//![resizeEvent]
-
-//![cursorPositionChanged]
 
 void TextEdit::highlightCurrentLine()
 {
@@ -100,40 +82,30 @@ void TextEdit::highlightCurrentLine()
     setExtraSelections(extraSelections);
 }
 
-//![cursorPositionChanged]
-
-//![extraAreaPaintEvent_0]
-
 void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), Qt::lightGray);
 
-//![extraAreaPaintEvent_0]
-
-//![extraAreaPaintEvent_1]
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
     int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom = top + (int) blockBoundingRect(block).height();
-//![extraAreaPaintEvent_1]
 
-//![extraAreaPaintEvent_2]
     while (block.isValid() && top <= event->rect().bottom()) {
-        if (block.isVisible() && bottom >= event->rect().top()) {
+        if (block.isVisible() && bottom >= event->rect().top())
+        {
             QString number = QString::number(blockNumber + 1);
             painter.setPen(Qt::black);
-            painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
-                             Qt::AlignRight, number);
+            painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(), Qt::AlignRight, number);
         }
-
         block = block.next();
         top = bottom;
         bottom = top + (int) blockBoundingRect(block).height();
         ++blockNumber;
     }
 }
-//![extraAreaPaintEvent_2]
+
 void TextEdit::emitSize()
 {
     emit textChanged(this->document()->characterCount(),this->blockCount());
@@ -146,8 +118,7 @@ void TextEdit::setMod(bool mod)
 
 TextEdit::~TextEdit()
 {
-    if (this->isMod)
-    {
+    if (this->isMod && !(this->document()->characterCount()==1 && (this->fileName=="null"||this->fileName=="")))    {
     QMessageBox msgBox;
     msgBox.setText("The document has been modified.");
     msgBox.setInformativeText("Do you want to save your changes?");
@@ -168,14 +139,26 @@ QString TextEdit::saveFile()
         QTextStream out(&file);
         out << this->toPlainText();
         file.close();
-        this->isMod=false;
+        if (fileName=="") fileName="null";
+        else this->document()->setModified(false);
         return fileName;
 }
 
+QString TextEdit::saveFileAs()
+{
+        fileName=QFileDialog::getSaveFileName(this, tr("Save File"), "", tr("C/C++ file (*.c *.cpp *.h)"));
+    QFile file(fileName);
+        file.open(QIODevice::WriteOnly);
+        QTextStream out(&file);
+        out << this->toPlainText();
+        file.close();
+        if (fileName=="") fileName="null";
+        else this->document()->setModified(false);
+        return fileName;
+}
 QString TextEdit::openFile()
 {
-            fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "",
-            tr("C/C++ Files (*.c *.cpp *.h)"));
+        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("C/C++ Files (*.c *.cpp *.h)"));
 
             QFile file(fileName);
             !file.open(QIODevice::ReadOnly);
@@ -183,4 +166,12 @@ QString TextEdit::openFile()
             this->setPlainText(in.readAll());
             file.close();
             return fileName;
+}
+
+void TextEdit::findText(QString str, QTextDocument::FindFlags flag)
+{
+    if (!flag)
+        this->find(str);
+    else
+        this->find(str,flag);
 }

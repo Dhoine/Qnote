@@ -9,11 +9,29 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setupMenus();
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(deleteTab(int)));
+    connect(ui->lineEdit,SIGNAL(returnPressed()),this,SLOT(find()));
+    connect(ui->nextButton,SIGNAL(clicked(bool)),this,SLOT(find()));
+    connect(ui->prevButton,SIGNAL(clicked(bool)),this,SLOT(find()));
+    connect(ui->newFileLinkButton,SIGNAL(clicked(bool)),this,SLOT(newFile()));
+    connect(ui->openFileLinkButton,SIGNAL(clicked(bool)),this,SLOT(open()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::find()
+{
+    if (!documentsList.isEmpty())
+    {
+    if (sender()->objectName()=="lineEdit" || sender()->objectName()=="nextButton")
+    {
+    documentsList[ui->tabWidget->currentIndex()]->findText(ui->lineEdit->text());
+    }
+    else documentsList[ui->tabWidget->currentIndex()]->findText(ui->lineEdit->text(),QTextDocument::FindBackward);
+    ui->tabWidget->currentWidget()->setFocus();
+    }
 }
 
 void MainWindow::deleteTab(int i)
@@ -41,7 +59,7 @@ void MainWindow::changeCounter(int chars, int lines)
 
 void MainWindow::setupMenus()
 {
-    newAct=new QAction ("New",this);
+    newAct = new QAction ("New",this);
     newAct = new QAction(tr("&New"), this);
     newAct->setShortcuts(QKeySequence::New);
     newAct->setStatusTip(tr("Create a new file"));
@@ -56,6 +74,11 @@ void MainWindow::setupMenus()
     saveAct->setShortcuts(QKeySequence::Save);
     saveAct->setStatusTip(tr("Save the current document to disk"));
     connect(saveAct, &QAction::triggered, this, &MainWindow::save);
+
+    saveAsAct = new QAction (tr("&Save as..."),this);
+    saveAsAct->setShortcut(QKeySequence::SaveAs);
+    saveAsAct->setStatusTip(tr("Save document as..."));
+    connect(saveAsAct,&QAction::triggered,this,&MainWindow::saveAs);
 
     saveAllAct = new QAction(tr("&Save All"), this);
     saveAllAct->setStatusTip(tr("Save all the documents to disk"));
@@ -72,8 +95,11 @@ void MainWindow::setupMenus()
     fileMenu=ui->menuBar->addMenu(tr("&File"));
     fileMenu->addAction(newAct);
     fileMenu->addAction(openAct);
+    fileMenu->addSeparator();
     fileMenu->addAction(saveAct);
+    fileMenu->addAction(saveAsAct);
     fileMenu->addAction(saveAllAct);
+    fileMenu->addSeparator();
     fileMenu->addAction(closeAct);
     fileMenu->addAction(closeAllAct);
 }
@@ -87,6 +113,7 @@ void MainWindow::closeAll()
 
 void MainWindow::close()
 {
+    if (documentsList.isEmpty()) return;
     deleteTab(ui->tabWidget->currentIndex());
 }
 
@@ -104,6 +131,12 @@ void MainWindow::save()
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),documentsList[ui->tabWidget->currentIndex()]->saveFile());
 }
 
+void MainWindow::saveAs()
+{
+    if (documentsList.isEmpty()) return;
+    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),documentsList[ui->tabWidget->currentIndex()]->saveFileAs());
+}
+
 void MainWindow::saveAll()
 {
     if (documentsList.isEmpty()) return;
@@ -115,6 +148,12 @@ void MainWindow::open()
 {
     TextEdit* text=new TextEdit;
     connect(text,SIGNAL(textChanged(int,int)),this,SLOT(changeCounter(int,int)));
-    ui->tabWidget->addTab(text,text->openFile());
+    QString temp=text->openFile();
+    if (temp=="")
+    {
+        delete text;
+        return;
+    }
+    ui->tabWidget->addTab(text,temp);
     documentsList.append(text);
 }

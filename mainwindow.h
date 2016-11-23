@@ -27,6 +27,7 @@ private:
     QAction *newAct;
     QAction *openAct;
     QAction *saveAct;
+    QAction *saveAsAct;
     QAction *saveAllAct;
     QAction *closeAct;
     QAction *closeAllAct;
@@ -36,10 +37,12 @@ public slots:
     void changeCounter(int,int);
     void newFile();
     void save();
+    void saveAs();
     void open();
     void saveAll();
     void close();
     void closeAll();
+    void find();
 };
 
 #endif // MAINWINDOW_H
