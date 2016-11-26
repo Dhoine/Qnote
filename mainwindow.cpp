@@ -10,9 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setupMenus();
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(deleteTab(int)));
     connect(ui->lineEdit,SIGNAL(returnPressed()),this,SLOT(find()));
-    connect(ui->nextButton,SIGNAL(clicked(bool)),this,SLOT(find()));
-    connect(ui->prevButton,SIGNAL(clicked(bool)),this,SLOT(find()));
+    connect(ui->findButton,SIGNAL(clicked(bool)),this,SLOT(find()));
     connect(ui->newFileLinkButton,SIGNAL(clicked(bool)),this,SLOT(newFile()));
+    ui->findButton->setShortcut(QKeySequence::FindNext);
     connect(ui->openFileLinkButton,SIGNAL(clicked(bool)),this,SLOT(open()));
 }
 
@@ -23,15 +23,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::find()
 {
-    if (!documentsList.isEmpty())
-    {
-    if (sender()->objectName()=="lineEdit" || sender()->objectName()=="nextButton")
-    {
     documentsList[ui->tabWidget->currentIndex()]->findText(ui->lineEdit->text());
-    }
-    else documentsList[ui->tabWidget->currentIndex()]->findText(ui->lineEdit->text(),QTextDocument::FindBackward);
     ui->tabWidget->currentWidget()->setFocus();
-    }
 }
 
 void MainWindow::deleteTab(int i)

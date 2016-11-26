@@ -20,8 +20,8 @@ TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
     connect(this, SIGNAL(cursorPositionChanged()),this,SLOT(emitSize()));
     connect(this, SIGNAL(modificationChanged(bool)),this, SLOT(setMod(bool)));
 
-    Highlighter* highlighter = new Highlighter(this->document());
-    emit blockCountChanged(0);
+    highlighter = new Highlighter(this->document());
+    updateLineNumberAreaWidth(0);
     this->setFocus();
 }
 
@@ -128,6 +128,7 @@ TextEdit::~TextEdit()
     if (ret==QMessageBox::Save)
         saveFile();
     }
+    delete highlighter;
 }
 
 QString TextEdit::saveFile()
@@ -161,17 +162,27 @@ QString TextEdit::openFile()
         fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("C/C++ Files (*.c *.cpp *.h)"));
 
             QFile file(fileName);
-            !file.open(QIODevice::ReadOnly);
+            file.open(QIODevice::ReadOnly);
             QTextStream in(&file);
             this->setPlainText(in.readAll());
             file.close();
             return fileName;
 }
 
-void TextEdit::findText(QString str, QTextDocument::FindFlags flag)
+bool TextEdit::findText(QString str)
 {
-    if (!flag)
-        this->find(str);
-    else
-        this->find(str,flag);
+    QTextCursor temp=this->textCursor();
+    static QString prev;
+    bool isFound=false;
+        isFound=this->find(str);
+        if (!isFound)
+        {
+            this->moveCursor(QTextCursor::Start);
+            isFound=find(str);
+        }
+        if(!isFound)
+        {
+            this->textCursor()=temp;
+        }
+        prev=str;
 }

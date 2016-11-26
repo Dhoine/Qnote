@@ -16,11 +16,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     textedit.cpp \
-    highlighter.cpp
+    highlighter.cpp \
+    reader.cpp
 
 HEADERS  += mainwindow.h \
     textedit.h \
-    highlighter.h
+    highlighter.h \
+    reader.h
 
 FORMS    += mainwindow.ui
 
@@ -28,5 +30,6 @@ QMAKE_LFLAGS_RELEASE += -static -static-libgcc
 
 RESOURCES +=
 
-DISTFILES +=
+DISTFILES += \
+    cpp.xml
 

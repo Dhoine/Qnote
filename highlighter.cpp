@@ -5,25 +5,44 @@ Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
     HighlightingRule rule;
+    static reader xmlReader;
+    QString temp;
+    lists=xmlReader.getlists();
+    controlFormat.setForeground(Qt::blue);
+    controlFormat.setFontWeight(QFont::Bold);
+    foreach (const QString &pattern, lists[0]) {
+        temp=("\\b"+pattern+"\\b");
+        rule.pattern = QRegExp(temp);
+        rule.format = controlFormat;
+        highlightingRules.append(rule);
+    }
 
-    keywordFormat.setForeground(Qt::darkBlue);
+    keywordFormat.setForeground(Qt::darkGreen);
     keywordFormat.setFontWeight(QFont::Bold);
-    QStringList keywordPatterns;
-    keywordPatterns << "\\bchar\\b" << "\\bclass\\b" << "\\bconst\\b"
-                    << "\\bdouble\\b" << "\\benum\\b" << "\\bexplicit\\b"
-                    << "\\bfriend\\b" << "\\binline\\b" << "\\bint\\b"
-                    << "\\blong\\b" << "\\bnamespace\\b" << "\\boperator\\b"
-                    << "\\bprivate\\b" << "\\bprotected\\b" << "\\bpublic\\b"
-                    << "\\bshort\\b" << "\\bsignals\\b" << "\\bsigned\\b"
-                    << "\\bslots\\b" << "\\bstatic\\b" << "\\bstruct\\b"
-                    << "\\btemplate\\b" << "\\btypedef\\b" << "\\btypename\\b"
-                    << "\\bunion\\b" << "\\bunsigned\\b" << "\\bvirtual\\b"
-                    << "\\bvoid\\b" << "\\bvolatile\\b";
-    foreach (const QString &pattern, keywordPatterns) {
-        rule.pattern = QRegExp(pattern);
+    foreach (const QString &pattern, lists[1]) {
+        temp=("\\b"+pattern+"\\b");
+        rule.pattern = QRegExp(temp);
         rule.format = keywordFormat;
         highlightingRules.append(rule);
     }
+
+    typesFormat.setForeground(Qt::darkBlue);
+    typesFormat.setFontWeight(QFont::Bold);
+    foreach (const QString &pattern, lists[2]) {
+        temp=("\\b"+pattern+"\\b");
+        rule.pattern = QRegExp(temp);
+        rule.format = typesFormat;
+        highlightingRules.append(rule);
+    }
+
+    preprocessorFormat.setForeground(Qt::darkGray);
+    preprocessorFormat.setFontWeight(QFont::Bold);
+    foreach (const QString &pattern, lists[3]) {
+        rule.pattern = QRegExp("\\b*#"+pattern+"? ?([A-Za-z0-9]+)? ?([A-Za-z0-9]+)\\b");
+        rule.format = preprocessorFormat;
+        highlightingRules.append(rule);
+    }
+
 
     classFormat.setFontWeight(QFont::Bold);
     classFormat.setForeground(Qt::darkMagenta);
@@ -86,3 +105,7 @@ void Highlighter::highlightBlock(const QString &text)
     }
 }
 
+Highlighter::~Highlighter()
+{
+    delete lists;
+}

@@ -83,16 +83,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="nextButton">
+       <widget class="QPushButton" name="findButton">
         <property name="text">
-         <string>Find next</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="prevButton">
-        <property name="text">
-         <string>Find previous</string>
+         <string>Find</string>
         </property>
        </widget>
       </item>

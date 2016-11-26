@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QPlainTextEdit>
 #include <QtWidgets>
+#include "highlighter.h"
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
 class QResizeEvent;
@@ -21,7 +22,7 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
     QString saveFileAs();
-    void findText(QString, QTextDocument::FindFlags flag=QTextDocument::FindFlags());
+    bool findText(QString);
     ~TextEdit();
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
@@ -45,6 +46,7 @@ private:
     bool isMod=false;
     bool isFirstTime=true;
     QString fileName="null";
+    Highlighter* highlighter;
 };
 
 class LineNumberArea : public QWidget

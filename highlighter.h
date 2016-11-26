@@ -3,6 +3,7 @@
 
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
+#include "reader.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -15,6 +16,7 @@ class Highlighter : public QSyntaxHighlighter
 
 public:
     Highlighter(QTextDocument *parent = 0);
+    ~Highlighter();
 
 protected:
     void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
@@ -30,12 +32,17 @@ private:
     QRegExp commentStartExpression;
     QRegExp commentEndExpression;
 
+    QTextCharFormat controlFormat;
     QTextCharFormat keywordFormat;
+    QTextCharFormat typesFormat;
+    QTextCharFormat preprocessorFormat;
     QTextCharFormat classFormat;
     QTextCharFormat singleLineCommentFormat;
     QTextCharFormat multiLineCommentFormat;
     QTextCharFormat quotationFormat;
     QTextCharFormat functionFormat;
+    QStringList* lists;
+    void setRules(QBrush&,int);
 };
 
 #endif // HIGHLIGHTER_H
