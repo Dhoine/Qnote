@@ -6,6 +6,10 @@
 #include <QPlainTextEdit>
 #include <QtWidgets>
 #include "highlighter.h"
+#include <QPainter>
+#include <QPaintEvent>
+#include <QFileDialog>
+#include <QTextCursor>
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
 class QResizeEvent;

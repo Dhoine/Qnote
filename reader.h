@@ -3,6 +3,9 @@
 
 #include <QObject>
 #include <QXmlStreamReader>
+#include <QFile>
+#include <QString>
+#include <QDir>
 
 class reader
 {

@@ -6,13 +6,11 @@ Highlighter::Highlighter(QTextDocument *parent)
 {
     HighlightingRule rule;
     static reader xmlReader;
-    QString temp;
     lists=xmlReader.getlists();
     controlFormat.setForeground(Qt::blue);
     controlFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, lists[0]) {
-        temp=("\\b"+pattern+"\\b");
-        rule.pattern = QRegExp(temp);
+        rule.pattern = QRegExp("\\b"+pattern+"\\b");
         rule.format = controlFormat;
         highlightingRules.append(rule);
     }
@@ -20,8 +18,7 @@ Highlighter::Highlighter(QTextDocument *parent)
     keywordFormat.setForeground(Qt::darkGreen);
     keywordFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, lists[1]) {
-        temp=("\\b"+pattern+"\\b");
-        rule.pattern = QRegExp(temp);
+        rule.pattern = QRegExp("\\b"+pattern+"\\b");
         rule.format = keywordFormat;
         highlightingRules.append(rule);
     }
@@ -29,8 +26,7 @@ Highlighter::Highlighter(QTextDocument *parent)
     typesFormat.setForeground(Qt::darkBlue);
     typesFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, lists[2]) {
-        temp=("\\b"+pattern+"\\b");
-        rule.pattern = QRegExp(temp);
+        rule.pattern = QRegExp("\\b"+pattern+"\\b");
         rule.format = typesFormat;
         highlightingRules.append(rule);
     }

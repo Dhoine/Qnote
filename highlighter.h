@@ -42,7 +42,6 @@ private:
     QTextCharFormat quotationFormat;
     QTextCharFormat functionFormat;
     QStringList* lists;
-    void setRules(QBrush&,int);
 };
 
 #endif // HIGHLIGHTER_H

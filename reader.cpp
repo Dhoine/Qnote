@@ -1,11 +1,4 @@
 #include "reader.h"
-#include <QXmlStreamReader>
-#include <QFile>
-#include <iostream>
-#include <QString>
-#include <QDir>
-using namespace std;
-
 
 reader::reader()
 {

@@ -1,13 +1,5 @@
 #include "textedit.h"
-#include <QPainter>
-#include <QPaintEvent>
-#include <QtWidgets>
-#include <QErrorMessage>
-#include <QFileDialog>
-#include <QTextOption>
-#include <QTextCursor>
-#include "highlighter.h"
-#include "mainwindow.h"
+
 
 TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
 {
