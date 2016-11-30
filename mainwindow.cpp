@@ -23,6 +23,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::find()
 {
+    if (documentsList.isEmpty()) return;
+    if(ui->lineEdit->text()=="")
+    {
+        ui->lineEdit->setFocus();
+        return;
+    }
     documentsList[ui->tabWidget->currentIndex()]->findText(ui->lineEdit->text());
     ui->tabWidget->currentWidget()->setFocus();
 }
@@ -78,6 +84,7 @@ void MainWindow::setupMenus()
     connect(saveAllAct, &QAction::triggered, this, &MainWindow::saveAll);
 
     closeAct=new QAction(tr("&Close"),this);
+    closeAct->setShortcut(QKeySequence::Close);
     closeAct->setStatusTip(tr("Close current document"));
     connect(closeAct,&QAction::triggered ,this,&MainWindow::close);
 

@@ -26,7 +26,7 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
     QString saveFileAs();
-    bool findText(QString);
+    void findText(QString);
     ~TextEdit();
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;

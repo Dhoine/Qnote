@@ -5,7 +5,7 @@ Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
     HighlightingRule rule;
-    static reader xmlReader;
+    reader xmlReader;
     lists=xmlReader.getlists();
     controlFormat.setForeground(Qt::blue);
     controlFormat.setFontWeight(QFont::Bold);
@@ -34,7 +34,7 @@ Highlighter::Highlighter(QTextDocument *parent)
     preprocessorFormat.setForeground(Qt::darkGray);
     preprocessorFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, lists[3]) {
-        rule.pattern = QRegExp("\\b*#"+pattern+"? ?([A-Za-z0-9]+)? ?([A-Za-z0-9]+)\\b");
+        rule.pattern = QRegExp("\\b*#"+pattern+"? ?([A-Za-z0-9_<>.]+)? ?([A-Za-z0-9_<>.]+)\\b");
         rule.format = preprocessorFormat;
         highlightingRules.append(rule);
     }

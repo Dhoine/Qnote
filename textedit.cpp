@@ -110,7 +110,8 @@ void TextEdit::setMod(bool mod)
 
 TextEdit::~TextEdit()
 {
-    if (this->isMod && !(this->document()->characterCount()==1 && (this->fileName=="null"||this->fileName=="")))    {
+    if (this->isMod && !(this->document()->characterCount()==1 && (this->fileName=="null"||this->fileName=="")))
+    {
     QMessageBox msgBox;
     msgBox.setText("The document has been modified.");
     msgBox.setInformativeText("Do you want to save your changes?");
@@ -121,6 +122,7 @@ TextEdit::~TextEdit()
         saveFile();
     }
     delete highlighter;
+    emit textChanged(0,0);
 }
 
 QString TextEdit::saveFile()
@@ -161,7 +163,7 @@ QString TextEdit::openFile()
             return fileName;
 }
 
-bool TextEdit::findText(QString str)
+void TextEdit::findText(QString str)
 {
     QTextCursor temp=this->textCursor();
     static QString prev;
@@ -174,7 +176,6 @@ bool TextEdit::findText(QString str)
         }
         if(!isFound)
         {
-            this->textCursor()=temp;
+            this->setTextCursor(temp);
         }
-        prev=str;
 }

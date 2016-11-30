@@ -5,7 +5,6 @@
 #include <QTextCharFormat>
 #include "reader.h"
 
-
 QT_BEGIN_NAMESPACE
 class QTextDocument;
 QT_END_NAMESPACE

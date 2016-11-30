@@ -10,7 +10,7 @@ void reader::readXml()
 {
     QXmlStreamReader xmlReader;
     QFile input(QDir::currentPath()+"\\cpp.xml");
-    input.open(QFile::ReadOnly);
+    if (!input.open(QFile::ReadOnly)) return;
     xmlReader.setDevice(&input);
     xmlReader.readNextStartElement();
     while(!xmlReader.atEnd())
@@ -34,6 +34,7 @@ void reader::readXml()
         }
         else xmlReader.readNext();
     }
+    input.close();
 }
 
 void reader::readElements(QXmlStreamReader &xmlReader, int i)
