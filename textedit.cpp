@@ -11,10 +11,11 @@ TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     connect(this->document(), SIGNAL(contentsChanged()),this,SLOT(emitSize()));
     connect(this, SIGNAL(modificationChanged(bool)),this, SLOT(setMod(bool)));
+    connect(this->document(),SIGNAL(contentsChange(int,int,int)),this,SLOT(updateSearch()));
 
     highlighter = new Highlighter(this->document());
     updateLineNumberAreaWidth(0);
-    this->setFocus();
+    prevSearch.clear();
 }
 
 int TextEdit::lineNumberAreaWidth()
@@ -165,7 +166,9 @@ QString TextEdit::openFile()
 
 void TextEdit::findText(QString str)
 {
+    prevSearch=str;
     clearBackground();
+    if(str=="") return;
     if(!highlightBackground(str)) return;
     QTextCursor temp=this->textCursor();
     bool isFound=false;
@@ -219,10 +222,14 @@ bool TextEdit::highlightBackground(QString str)
         }
 
         cursor.endEditBlock();
-
-        if (found == false) {
-            QMessageBox::information(this, tr("Not Found"),
-                "Sorry, no matches.");
-        }
     return found;
+}
+
+void TextEdit::updateSearch()
+{
+    if (!prevSearch.isEmpty())
+    {
+        clearBackground();
+        highlightBackground(prevSearch);
+    }
 }

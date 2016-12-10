@@ -31,9 +31,10 @@ private:
     QAction *saveAllAct;
     QAction *closeAct;
     QAction *closeAllAct;
+    QTimer *typingTimer;
 private slots:
     void deleteTab(int);
-public slots:
+    void onLineEdited();
     void changeCounter(int,int);
     void newFile();
     void save();

@@ -38,6 +38,7 @@ private slots:
     void updateLineNumberArea(const QRect &, int);
     void emitSize();
     void setMod(bool);
+    void updateSearch();
 public slots:
     QString saveFile();
     QString openFile();
@@ -49,10 +50,10 @@ signals:
 private:
     QWidget *lineNumberArea;
     bool isMod=false;
-    bool isFirstTime=true;
     QString fileName="null";
     Highlighter* highlighter;
     bool highlightBackground(QString);
+    QString prevSearch;
 };
 
 class LineNumberArea : public QWidget

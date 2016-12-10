@@ -8,6 +8,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setupMenus();
+    typingTimer = new QTimer( this );
+    typingTimer->setSingleShot( true );
+    connect( typingTimer, &QTimer::timeout, this, &MainWindow::find);
+    connect(ui->lineEdit, QLineEdit::textChanged, this, &MainWindow::onLineEdited );
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(deleteTab(int)));
     connect(ui->lineEdit,SIGNAL(returnPressed()),this,SLOT(find()));
     connect(ui->findButton,SIGNAL(clicked(bool)),this,SLOT(find()));
@@ -19,19 +23,32 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete typingTimer;
+    delete fileMenu;
+    delete newAct;
+    delete openAct;
+    delete saveAct;
+    delete saveAsAct;
+    delete saveAllAct;
+    delete closeAct;
+    delete closeAllAct;
+}
+
+void MainWindow::onLineEdited()
+{
+    typingTimer->start( 2000 );
 }
 
 void MainWindow::find()
 {
+    typingTimer->stop();
     if (documentsList.isEmpty()) return;
     if(ui->lineEdit->text()=="")
     {
         ui->lineEdit->setFocus();
         documentsList[ui->tabWidget->currentIndex()]->clearBackground();
-        return;
     }
     documentsList[ui->tabWidget->currentIndex()]->findText(ui->lineEdit->text());
-    ui->tabWidget->currentWidget()->setFocus();
 }
 
 void MainWindow::deleteTab(int i)
