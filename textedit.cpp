@@ -165,8 +165,9 @@ QString TextEdit::openFile()
 
 void TextEdit::findText(QString str)
 {
+    clearBackground();
+    if(!highlightBackground(str)) return;
     QTextCursor temp=this->textCursor();
-    static QString prev;
     bool isFound=false;
         isFound=this->find(str);
         if (!isFound)
@@ -178,4 +179,50 @@ void TextEdit::findText(QString str)
         {
             this->setTextCursor(temp);
         }
+
+}
+
+void TextEdit::clearBackground()
+{
+    QTextCursor temp(this->document());
+    temp.beginEditBlock();
+    QTextCharFormat plainFormat(temp.charFormat());
+    plainFormat.setBackground(Qt::white);
+    temp.setPosition(QTextCursor::Start-1);
+    temp.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    temp.setCharFormat(plainFormat);
+    temp.endEditBlock();
+}
+
+bool TextEdit::highlightBackground(QString str)
+{
+    QTextDocument *document = this->document();
+
+    bool found = false;
+
+        QTextCursor highlightCursor(document);
+        QTextCursor cursor(document);
+
+        cursor.beginEditBlock();
+
+        QTextCharFormat plainFormat(highlightCursor.charFormat());
+        QTextCharFormat colorFormat = plainFormat;
+        colorFormat.setBackground(Qt::green);
+
+        while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
+            highlightCursor = document->find(str, highlightCursor);
+
+            if (!highlightCursor.isNull()) {
+                found = true;
+                highlightCursor.mergeCharFormat(colorFormat);
+            }
+        }
+
+        cursor.endEditBlock();
+
+        if (found == false) {
+            QMessageBox::information(this, tr("Not Found"),
+                "Sorry, no matches.");
+        }
+    return found;
 }

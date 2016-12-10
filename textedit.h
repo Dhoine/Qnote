@@ -27,6 +27,7 @@ public:
     int lineNumberAreaWidth();
     QString saveFileAs();
     void findText(QString);
+    void clearBackground();
     ~TextEdit();
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
@@ -51,6 +52,7 @@ private:
     bool isFirstTime=true;
     QString fileName="null";
     Highlighter* highlighter;
+    bool highlightBackground(QString);
 };
 
 class LineNumberArea : public QWidget

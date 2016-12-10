@@ -27,6 +27,7 @@ void MainWindow::find()
     if(ui->lineEdit->text()=="")
     {
         ui->lineEdit->setFocus();
+        documentsList[ui->tabWidget->currentIndex()]->clearBackground();
         return;
     }
     documentsList[ui->tabWidget->currentIndex()]->findText(ui->lineEdit->text());
