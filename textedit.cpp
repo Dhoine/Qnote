@@ -9,7 +9,7 @@ TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
-    connect(this, SIGNAL(cursorPositionChanged()),this,SLOT(emitSize()));
+    connect(this->document(), SIGNAL(contentsChanged()),this,SLOT(emitSize()));
     connect(this, SIGNAL(modificationChanged(bool)),this, SLOT(setMod(bool)));
 
     highlighter = new Highlighter(this->document());
@@ -122,7 +122,7 @@ TextEdit::~TextEdit()
         saveFile();
     }
     delete highlighter;
-    emit textChanged(0,0);
+    emit textChanged(1,0);
 }
 
 QString TextEdit::saveFile()
