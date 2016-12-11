@@ -187,6 +187,7 @@ void TextEdit::findText(QString str)
 
 void TextEdit::clearBackground()
 {
+    wasMod=isMod;
     QTextCursor temp(this->document());
     temp.beginEditBlock();
     QTextCharFormat plainFormat(temp.charFormat());
@@ -222,6 +223,7 @@ bool TextEdit::highlightBackground(QString str)
         }
 
         cursor.endEditBlock();
+        emit modificationChanged(wasMod);
     return found;
 }
 

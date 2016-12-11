@@ -54,6 +54,7 @@ private:
     Highlighter* highlighter;
     bool highlightBackground(QString);
     QString prevSearch;
+    bool wasMod;
 };
 
 class LineNumberArea : public QWidget
