@@ -10,13 +10,6 @@
 #include <QPaintEvent>
 #include <QFileDialog>
 #include <QTextCursor>
-QT_BEGIN_NAMESPACE
-class QPaintEvent;
-class QResizeEvent;
-class QSize;
-class QWidget;
-QT_END_NAMESPACE
-class LineNumberArea;
 
 class TextEdit: public QPlainTextEdit
 {
@@ -30,7 +23,7 @@ public:
     void clearBackground();
     ~TextEdit();
 protected:
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event);
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -64,12 +57,12 @@ public:
         codeEditor = editor;
     }
 
-    QSize sizeHint() const Q_DECL_OVERRIDE {
+    QSize sizeHint() const  {
         return QSize(codeEditor->lineNumberAreaWidth(), 0);
     }
 
 protected:
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE {
+    void paintEvent(QPaintEvent *event) {
         codeEditor->lineNumberAreaPaintEvent(event);
     }
 

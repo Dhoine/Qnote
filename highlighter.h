@@ -5,10 +5,6 @@
 #include <QTextCharFormat>
 #include "reader.h"
 
-QT_BEGIN_NAMESPACE
-class QTextDocument;
-QT_END_NAMESPACE
-
 class Highlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -18,7 +14,7 @@ public:
     ~Highlighter();
 
 protected:
-    void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
+    void highlightBlock(const QString &text);
 
 private:
     struct HighlightingRule
@@ -41,6 +37,7 @@ private:
     QTextCharFormat quotationFormat;
     QTextCharFormat functionFormat;
     QStringList* lists;
+    Reader xmlReader;
 };
 
 #endif // HIGHLIGHTER_H

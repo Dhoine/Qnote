@@ -5,7 +5,6 @@ Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
     HighlightingRule rule;
-    reader xmlReader;
     lists=xmlReader.getlists();
     controlFormat.setForeground(Qt::blue);
     controlFormat.setFontWeight(QFont::Bold);

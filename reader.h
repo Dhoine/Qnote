@@ -7,14 +7,15 @@
 #include <QString>
 #include <QDir>
 
-class reader
+class Reader
 {
     QStringList* lists;
     void readElements(QXmlStreamReader&,int);
     void readXml();
 public:
     QStringList* getlists();
-    reader();
+    Reader();
+    ~Reader();
 };
 
 #endif // READER_H

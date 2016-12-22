@@ -4,6 +4,7 @@
 TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
 {
     this->setLineWrapMode(NoWrap);
+    this->setUndoRedoEnabled(false);
     lineNumberArea = new LineNumberArea(this);
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
@@ -123,33 +124,35 @@ TextEdit::~TextEdit()
         saveFile();
     }
     delete highlighter;
+    delete lineNumberArea;
     emit textChanged(1,0);
 }
 
 QString TextEdit::saveFile()
 {
-    if (fileName=="null")
+    if (fileName=="null"||fileName=="")
         fileName=QFileDialog::getSaveFileName(this, tr("Save File"), "", tr("C/C++ file (*.c *.cpp *.h)"));
+    if (fileName=="") return "null";
     QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         QTextStream out(&file);
         out << this->toPlainText();
         file.close();
-        if (fileName=="") fileName="null";
-        else this->document()->setModified(false);
+        this->document()->setModified(false);
         return fileName;
 }
 
 QString TextEdit::saveFileAs()
 {
+    QString temp=fileName;
         fileName=QFileDialog::getSaveFileName(this, tr("Save File"), "", tr("C/C++ file (*.c *.cpp *.h)"));
+        if (fileName=="") return temp;
     QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         QTextStream out(&file);
         out << this->toPlainText();
         file.close();
-        if (fileName=="") fileName="null";
-        else this->document()->setModified(false);
+        this->document()->setModified(false);
         return fileName;
 }
 QString TextEdit::openFile()
@@ -167,61 +170,50 @@ QString TextEdit::openFile()
 void TextEdit::findText(QString str)
 {
     prevSearch=str;
-    clearBackground();
-    if(str=="") return;
-    if(!highlightBackground(str)) return;
-    QTextCursor temp=this->textCursor();
-    bool isFound=false;
-        isFound=this->find(str);
-        if (!isFound)
+    bool found=highlightBackground(str);
+    if(!found) return;
+        found=this->find(str);
+        if (!found)
         {
             this->moveCursor(QTextCursor::Start);
-            isFound=find(str);
+            found=find(str);
         }
-        if(!isFound)
-        {
-            this->setTextCursor(temp);
-        }
-
+        else return;
 }
 
-void TextEdit::clearBackground()
-{
-    wasMod=isMod;
-    QTextCursor temp(this->document());
-    temp.beginEditBlock();
-    QTextCharFormat plainFormat(temp.charFormat());
-    plainFormat.setBackground(Qt::white);
-    temp.setPosition(QTextCursor::Start-1);
-    temp.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-    temp.setCharFormat(plainFormat);
-    temp.endEditBlock();
-}
+
 
 bool TextEdit::highlightBackground(QString str)
 {
     QTextDocument *document = this->document();
-
+    wasMod=isMod;
+    QTextCursor cursor(this->document());
+    cursor.beginEditBlock();
+    QTextCharFormat format(cursor.charFormat());
+    format.setBackground(Qt::white);
+    cursor.setPosition(QTextCursor::Start-1);
+    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    cursor.setCharFormat(format);
+    if(str=="")
+    {
+        cursor.endEditBlock();
+        return false;
+    }
     bool found = false;
 
         QTextCursor highlightCursor(document);
-        QTextCursor cursor(document);
+        cursor=this->textCursor();
 
-        cursor.beginEditBlock();
-
-        QTextCharFormat plainFormat(highlightCursor.charFormat());
-        QTextCharFormat colorFormat = plainFormat;
-        colorFormat.setBackground(Qt::green);
+        format.setBackground(Qt::green);
 
         while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
             highlightCursor = document->find(str, highlightCursor);
 
             if (!highlightCursor.isNull()) {
                 found = true;
-                highlightCursor.mergeCharFormat(colorFormat);
+                highlightCursor.mergeCharFormat(format);
             }
         }
-
         cursor.endEditBlock();
         emit modificationChanged(wasMod);
     return found;
@@ -231,7 +223,6 @@ void TextEdit::updateSearch()
 {
     if (!prevSearch.isEmpty())
     {
-        clearBackground();
         highlightBackground(prevSearch);
     }
 }

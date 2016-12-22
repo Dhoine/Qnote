@@ -1,12 +1,12 @@
 #include "reader.h"
 
-reader::reader()
+Reader::Reader()
 {
     lists=new QStringList[4];
     readXml();
 }
 
-void reader::readXml()
+void Reader::readXml()
 {
     QXmlStreamReader xmlReader;
     QFile input(QDir::currentPath()+"\\cpp.xml");
@@ -37,7 +37,7 @@ void reader::readXml()
     input.close();
 }
 
-void reader::readElements(QXmlStreamReader &xmlReader, int i)
+void Reader::readElements(QXmlStreamReader &xmlReader, int i)
 {
     while (!xmlReader.atEnd())
     {
@@ -55,7 +55,12 @@ void reader::readElements(QXmlStreamReader &xmlReader, int i)
     }
 }
 
-QStringList* reader::getlists()
+QStringList* Reader::getlists()
 {
     return lists;
+}
+
+Reader::~Reader()
+{
+    delete lists;
 }
