@@ -37,7 +37,6 @@ private:
     QTextCharFormat quotationFormat;
     QTextCharFormat functionFormat;
     QStringList* lists;
-    Reader xmlReader;
 };
 
 #endif // HIGHLIGHTER_H

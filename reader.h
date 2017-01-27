@@ -9,13 +9,18 @@
 
 class Reader
 {
-    QStringList* lists;
+    QStringList lists[4];
     void readElements(QXmlStreamReader&,int);
     void readXml();
+    Reader();
 public:
     QStringList* getlists();
-    Reader();
-    ~Reader();
+    static Reader& Instance()
+    {
+        static Reader s;
+        s.readXml();
+        return s;
+    }
 };
 
 #endif // READER_H

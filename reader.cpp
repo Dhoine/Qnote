@@ -2,8 +2,6 @@
 
 Reader::Reader()
 {
-    lists=new QStringList[4];
-    readXml();
 }
 
 void Reader::readXml()
@@ -58,9 +56,4 @@ void Reader::readElements(QXmlStreamReader &xmlReader, int i)
 QStringList* Reader::getlists()
 {
     return lists;
-}
-
-Reader::~Reader()
-{
-    delete lists;
 }
