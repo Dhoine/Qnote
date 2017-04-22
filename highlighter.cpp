@@ -103,5 +103,4 @@ void Highlighter::highlightBlock(const QString &text)
 
 Highlighter::~Highlighter()
 {
-    delete lists;
 }
