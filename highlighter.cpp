@@ -89,13 +89,7 @@ void Highlighter::highlightBlock(const QString &text)
             index = expression.indexIn(text, index + length);
         }
     }
-    QRegExp expression(searchRule.pattern);
-    int index = expression.indexIn(text);
-    while (index >= 0) {
-        int length = expression.matchedLength();
-        setFormat(index, length, searchRule.format);
-        index = expression.indexIn(text, index + length);
-    }
+
     setCurrentBlockState(0);
 
     int startIndex = 0;
@@ -114,6 +108,14 @@ void Highlighter::highlightBlock(const QString &text)
         }
         setFormat(startIndex, commentLength, multiLineCommentFormat);
         startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
+    }
+
+    QRegExp expression(searchRule.pattern);
+    int index = expression.indexIn(text);
+    while (index >= 0) {
+        int length = expression.matchedLength();
+        setFormat(index, length, searchRule.format);
+        index = expression.indexIn(text, index + length);
     }
 }
 
