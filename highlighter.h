@@ -12,6 +12,7 @@ class Highlighter : public QSyntaxHighlighter
 public:
     Highlighter(QTextDocument *parent = 0);
     ~Highlighter();
+    void setWord(QString&);
 
 protected:
     void highlightBlock(const QString &text);
@@ -36,6 +37,9 @@ private:
     QTextCharFormat multiLineCommentFormat;
     QTextCharFormat quotationFormat;
     QTextCharFormat functionFormat;
+    QTextCharFormat searchFormat;
+    QString word;
+    HighlightingRule searchRule;
     QStringList* lists;
 };
 

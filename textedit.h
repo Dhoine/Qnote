@@ -31,7 +31,6 @@ private slots:
     void updateLineNumberArea(const QRect &, int);
     void emitSize();
     void setMod(bool);
-    void updateSearch();
 public slots:
     QString saveFile();
     QString openFile();
@@ -45,8 +44,6 @@ private:
     bool isMod=false;
     QString fileName="null";
     Highlighter* highlighter;
-    bool highlightBackground(QString);
-    QString prevSearch;
     bool wasMod;
 };
 

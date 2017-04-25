@@ -4,7 +4,6 @@
 TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
 {
     this->setLineWrapMode(NoWrap);
-    this->setUndoRedoEnabled(false);
     lineNumberArea = new LineNumberArea(this);
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
@@ -12,11 +11,8 @@ TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     connect(this->document(), SIGNAL(contentsChanged()),this,SLOT(emitSize()));
     connect(this, SIGNAL(modificationChanged(bool)),this, SLOT(setMod(bool)));
-    connect(this->document(),SIGNAL(contentsChange(int,int,int)),this,SLOT(updateSearch()));
-
     highlighter = new Highlighter(this->document());
     updateLineNumberAreaWidth(0);
-    prevSearch.clear();
 }
 
 int TextEdit::lineNumberAreaWidth()
@@ -169,10 +165,8 @@ QString TextEdit::openFile()
 
 void TextEdit::findText(QString str)
 {
-    prevSearch=str;
-    bool found=highlightBackground(str);
-    if(!found) return;
-        found=this->find(str);
+    highlighter->setWord(str);
+        bool found=this->find(str);
         if (!found)
         {
             this->moveCursor(QTextCursor::Start);
@@ -181,48 +175,3 @@ void TextEdit::findText(QString str)
         else return;
 }
 
-
-
-bool TextEdit::highlightBackground(QString str)
-{
-    QTextDocument *document = this->document();
-    wasMod=isMod;
-    QTextCursor cursor(this->document());
-    cursor.beginEditBlock();
-    QTextCharFormat format(cursor.charFormat());
-    format.setBackground(Qt::white);
-    cursor.setPosition(QTextCursor::Start-1);
-    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-    cursor.setCharFormat(format);
-    if(str=="")
-    {
-        cursor.endEditBlock();
-        return false;
-    }
-    bool found = false;
-
-        QTextCursor highlightCursor(document);
-        cursor=this->textCursor();
-
-        format.setBackground(Qt::green);
-
-        while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
-            highlightCursor = document->find(str, highlightCursor);
-
-            if (!highlightCursor.isNull()) {
-                found = true;
-                highlightCursor.mergeCharFormat(format);
-            }
-        }
-        cursor.endEditBlock();
-        emit modificationChanged(wasMod);
-    return found;
-}
-
-void TextEdit::updateSearch()
-{
-    if (!prevSearch.isEmpty())
-    {
-        highlightBackground(prevSearch);
-    }
-}

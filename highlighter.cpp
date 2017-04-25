@@ -1,9 +1,19 @@
 #include "highlighter.h"
 
+void Highlighter::setWord(QString& s)
+{
+    word=s;
+    if (word=="") word="dfgsdfhsdhsdhsdhsdhsdhdshsdfhsd";
+    searchRule.pattern=QRegExp(word,Qt::CaseInsensitive);
+    rehighlight();
+}
 
 Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
+    searchFormat.setBackground(Qt::green);
+    searchRule.format=searchFormat;
+    searchRule.pattern=QRegExp("sdgfsdgsdfhsdfhaehaerhaefhsfdhsdhsd");
     HighlightingRule rule;
     Reader xmlReader=Reader::Instance();
     lists=xmlReader.getlists();
@@ -79,7 +89,13 @@ void Highlighter::highlightBlock(const QString &text)
             index = expression.indexIn(text, index + length);
         }
     }
-
+    QRegExp expression(searchRule.pattern);
+    int index = expression.indexIn(text);
+    while (index >= 0) {
+        int length = expression.matchedLength();
+        setFormat(index, length, searchRule.format);
+        index = expression.indexIn(text, index + length);
+    }
     setCurrentBlockState(0);
 
     int startIndex = 0;
