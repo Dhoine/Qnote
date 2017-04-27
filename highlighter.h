@@ -4,6 +4,7 @@
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
 #include "reader.h"
+#include <settingsstorage.h>
 
 class Highlighter : public QSyntaxHighlighter
 {

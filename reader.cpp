@@ -7,7 +7,8 @@ Reader::Reader()
 void Reader::readXml()
 {
     QXmlStreamReader xmlReader;
-    QFile input(QDir::currentPath()+"\\cpp.xml");
+    SettingsStorage *reader=&SettingsStorage::Instance();
+    QFile input(QDir::currentPath()+"\\"+reader->getLang()+".xml");
     if (!input.open(QFile::ReadOnly)) return;
     xmlReader.setDevice(&input);
     xmlReader.readNextStartElement();

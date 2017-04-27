@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setupMenus();
+    Reader *reader=&Reader::Instance();
+    reader->readXml();
     typingTimer = new QTimer( this );
     typingTimer->setSingleShot( true );
     connect( typingTimer, &QTimer::timeout, this, &MainWindow::find);
@@ -119,6 +121,17 @@ void MainWindow::setupMenus()
     fileMenu->addSeparator();
     fileMenu->addAction(closeAct);
     fileMenu->addAction(closeAllAct);
+
+    toolsMenu=ui->menuBar->addMenu(tr("Tools"));
+    settingsAct=new QAction(tr("&Settings"),this);
+    settingsAct->setStatusTip(tr("Open settings window"));
+    connect(settingsAct,&QAction::triggered,this,&MainWindow::openSettings);
+    toolsMenu->addAction(settingsAct);
+}
+
+void MainWindow::openSettings()
+{
+    settings.show();
 }
 
 void MainWindow::closeAll()

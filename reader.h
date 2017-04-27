@@ -6,21 +6,23 @@
 #include <QFile>
 #include <QString>
 #include <QDir>
+#include "settingsstorage.h"
 
 class Reader
 {
     QStringList lists[4];
     void readElements(QXmlStreamReader&,int);
-    void readXml();
     Reader();
 public:
     QStringList* getlists();
     static Reader& Instance()
     {
-        static Reader s;
-        s.readXml();
+        static Reader s;;
         return s;
     }
+    void readXml();
+    Reader(Reader const&) = delete;
+    void operator =(Reader const&)=delete;
 };
 
 #endif // READER_H

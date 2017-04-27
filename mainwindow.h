@@ -6,6 +6,8 @@
 #include <QString>
 #include <QVector>
 #include <QMenu>
+#include <settingsform.h>
+#include <reader.h>
 
 namespace Ui {
 class MainWindow;
@@ -18,12 +20,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     void setupMenus();
-    ~MainWindow();
+    virtual ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
     QVector<TextEdit*> documentsList;
     QMenu *fileMenu;
+    QMenu *toolsMenu;
     QAction *newAct;
     QAction *openAct;
     QAction *saveAct;
@@ -31,7 +34,10 @@ private:
     QAction *saveAllAct;
     QAction *closeAct;
     QAction *closeAllAct;
+    QAction *settingsAct;
     QTimer *typingTimer;
+    SettingsForm settings;
+
 private slots:
     void deleteTab(int);
     void onLineEdited();
@@ -44,6 +50,7 @@ private slots:
     void close();
     void closeAll();
     void find();
+    void openSettings();
 };
 
 #endif // MAINWINDOW_H

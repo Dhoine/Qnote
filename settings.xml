@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <textfield>
+        <font>Kristen ITC</font>
+        <font_size>8</font_size>
+        <line_wrap_mode>1</line_wrap_mode>
+        <line_numeration>1</line_numeration>
+    </textfield>
+    <highlighting>
+        <language>C,C++</language>
+        <colors>
+            <background_color>#666666</background_color>
+            <controlflow_color>#aaffff</controlflow_color>
+            <keywords_color>#00ff00</keywords_color>
+            <types_color>#55aaff</types_color>
+            <preprocessor_color>#bababa</preprocessor_color>
+            <normal_text_color>#ffffff</normal_text_color>
+            <comments_color>#ffaaff</comments_color>
+            <functions_color>#ffff7f</functions_color>
+            <search_background_color>#ffff7f</search_background_color>
+            <search_text_color>#000000</search_text_color>
+            <quotes_color>#aaff7f</quotes_color>
+            <classes_color>#ff55ff</classes_color>
+        </colors>
+    </highlighting>
+    <git>
+        <PATH></PATH>
+    </git>
+</settings>

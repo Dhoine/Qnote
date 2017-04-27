@@ -3,16 +3,30 @@
 
 TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
 {
-    this->setLineWrapMode(NoWrap);
-    lineNumberArea = new LineNumberArea(this);
 
+    SettingsStorage *reader=&SettingsStorage::Instance();
+    if (reader->getLineNumeration()=="1")
+    {
+    lineNumberArea = new LineNumberArea(this);
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
-    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
+    updateLineNumberAreaWidth(0);
+    }
+    if(reader->getLineWrapMode()!="1")
+    {
+        this->setLineWrapMode(NoWrap);
+    }
+    QFont font=QFont(reader->getFont());
+    font.setPointSize(reader->getFontSize().toInt());
+    this->setFont(font);
+    //connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     connect(this->document(), SIGNAL(contentsChanged()),this,SLOT(emitSize()));
     connect(this, SIGNAL(modificationChanged(bool)),this, SLOT(setMod(bool)));
     highlighter = new Highlighter(this->document());
-    updateLineNumberAreaWidth(0);
+    QPalette pal;
+    pal.setColor(QPalette::Base,QColor(reader->getBackgroundColor()));
+    pal.setColor(QPalette::Text,QColor(reader->getNormalTextColor()));
+    this->setPalette(pal);
 }
 
 int TextEdit::lineNumberAreaWidth()
@@ -47,10 +61,14 @@ void TextEdit::updateLineNumberArea(const QRect &rect, int dy)
 
 void TextEdit::resizeEvent(QResizeEvent *e)
 {
+    SettingsStorage *reader=&SettingsStorage::Instance();
+    if (reader->getLineNumeration()=="1")
+    {
     QPlainTextEdit::resizeEvent(e);
 
     QRect cr = contentsRect();
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+    }
 }
 
 void TextEdit::highlightCurrentLine()
@@ -120,7 +138,11 @@ TextEdit::~TextEdit()
         saveFile();
     }
     delete highlighter;
+    SettingsStorage *reader=&SettingsStorage::Instance();
+    if (reader->getLineNumeration()=="1")
+    {
     delete lineNumberArea;
+    }
     emit textChanged(1,0);
 }
 

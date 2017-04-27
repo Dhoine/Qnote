@@ -17,19 +17,25 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     textedit.cpp \
     highlighter.cpp \
-    reader.cpp
+    reader.cpp \
+    settingsform.cpp \
+    settingsstorage.cpp
 
 HEADERS  += mainwindow.h \
     textedit.h \
     highlighter.h \
-    reader.h
+    reader.h \
+    settingsform.h \
+    settingsstorage.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    settingsform.ui
 
 QMAKE_LFLAGS_RELEASE += -static -static-libgcc
 
 RESOURCES +=
 
 DISTFILES += \
-    cpp.xml
+    settings.xml \
+    C,C++.xml
 

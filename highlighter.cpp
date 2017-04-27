@@ -11,13 +11,15 @@ void Highlighter::setWord(QString& s)
 Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
-    searchFormat.setBackground(Qt::green);
+    SettingsStorage *reader=&SettingsStorage::Instance();
+    searchFormat.setBackground(QColor(reader->getSearchBackgroundColor()));
+    searchFormat.setForeground(QColor(reader->getSearchTextColor()));
     searchRule.format=searchFormat;
     searchRule.pattern=QRegExp("sdgfsdgsdfhsdfhaehaerhaefhsfdhsdhsd");
     HighlightingRule rule;
-    Reader xmlReader=Reader::Instance();
-    lists=xmlReader.getlists();
-    controlFormat.setForeground(Qt::blue);
+    Reader *xmlReader=&Reader::Instance();
+    lists=xmlReader->getlists();
+    controlFormat.setForeground(QColor(reader->getControlflowColor()));
     controlFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, lists[0]) {
         rule.pattern = QRegExp("\\b"+pattern+"\\b");
@@ -25,7 +27,7 @@ Highlighter::Highlighter(QTextDocument *parent)
         highlightingRules.append(rule);
     }
 
-    keywordFormat.setForeground(Qt::darkGreen);
+    keywordFormat.setForeground(QColor(reader->getKeywordsColor()));
     keywordFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, lists[1]) {
         rule.pattern = QRegExp("\\b"+pattern+"\\b");
@@ -33,7 +35,7 @@ Highlighter::Highlighter(QTextDocument *parent)
         highlightingRules.append(rule);
     }
 
-    typesFormat.setForeground(Qt::darkBlue);
+    typesFormat.setForeground(QColor(reader->getTypesColor()));
     typesFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, lists[2]) {
         rule.pattern = QRegExp("\\b"+pattern+"\\b");
@@ -41,7 +43,7 @@ Highlighter::Highlighter(QTextDocument *parent)
         highlightingRules.append(rule);
     }
 
-    preprocessorFormat.setForeground(Qt::darkGray);
+    preprocessorFormat.setForeground(QColor(reader->getPreprocessorColor()));
     preprocessorFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, lists[3]) {
         rule.pattern = QRegExp("\\b*#"+pattern+"? ?([A-Za-z0-9_<>.]+)? ?([A-Za-z0-9_<>.]+)\\b");
@@ -51,25 +53,25 @@ Highlighter::Highlighter(QTextDocument *parent)
 
 
     classFormat.setFontWeight(QFont::Bold);
-    classFormat.setForeground(Qt::darkMagenta);
+    classFormat.setForeground(QColor(reader->getClassesColor()));
     rule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
     rule.format = classFormat;
     highlightingRules.append(rule);
 
-    singleLineCommentFormat.setForeground(Qt::red);
+    singleLineCommentFormat.setForeground(QColor(reader->getCommentsColor()));
     rule.pattern = QRegExp("//[^\n]*");
     rule.format = singleLineCommentFormat;
     highlightingRules.append(rule);
 
-    multiLineCommentFormat.setForeground(Qt::red);
+    multiLineCommentFormat.setForeground(QColor(reader->getCommentsColor()));
 
-    quotationFormat.setForeground(Qt::darkGreen);
+    quotationFormat.setForeground(QColor(reader->getQuotesColor()));
     rule.pattern = QRegExp("\".*\"");
     rule.format = quotationFormat;
     highlightingRules.append(rule);
 
     functionFormat.setFontItalic(true);
-    functionFormat.setForeground(Qt::blue);
+    functionFormat.setForeground(QColor(reader->getFunctionColor()));
     rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
     rule.format = functionFormat;
     highlightingRules.append(rule);

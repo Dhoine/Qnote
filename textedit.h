@@ -10,6 +10,9 @@
 #include <QPaintEvent>
 #include <QFileDialog>
 #include <QTextCursor>
+#include <QColor>
+#include <QPalette>
+#include <settingsstorage.h>
 
 class TextEdit: public QPlainTextEdit
 {
@@ -21,7 +24,7 @@ public:
     QString saveFileAs();
     void findText(QString);
     void clearBackground();
-    ~TextEdit();
+    virtual ~TextEdit();
 protected:
     void resizeEvent(QResizeEvent *event);
 
