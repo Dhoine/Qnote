@@ -97,8 +97,9 @@ void SettingsForm::on_pushButton_clicked()
 
 void SettingsForm::on_pushButton_3_clicked()
 {
-    controlflow = QColorDialog::getColor(controlflow, this, "Select Color");
+    QColor color = QColorDialog::getColor(controlflow, this, "Select Color");
     QPalette pal;
+    if (color.isValid()) controlflow=color;
     pal.setColor(QPalette::Base,background);
     pal.setColor(QPalette::Text, controlflow);
     ui->textBrowser_3->setPalette(pal);
@@ -106,7 +107,8 @@ void SettingsForm::on_pushButton_3_clicked()
 
 void SettingsForm::on_pushButton_5_clicked()
 {
-    types = QColorDialog::getColor(types, this, "Select Color");
+    QColor color = QColorDialog::getColor(types, this, "Select Color");
+    if (color.isValid()) types=color;
     QPalette pal;
     pal.setColor(QPalette::Base,background);
     pal.setColor(QPalette::Text, types);
@@ -115,7 +117,8 @@ void SettingsForm::on_pushButton_5_clicked()
 
 void SettingsForm::on_pushButton_7_clicked()
 {
-    comments = QColorDialog::getColor(comments, this, "Select Color");
+    QColor color = QColorDialog::getColor(comments, this, "Select Color");
+    if (color.isValid()) background=color;
     QPalette pal;
     pal.setColor(QPalette::Base,background);
     pal.setColor(QPalette::Text, comments);
@@ -124,7 +127,8 @@ void SettingsForm::on_pushButton_7_clicked()
 
 void SettingsForm::on_pushButton_2_clicked()
 {
-    normal_text = QColorDialog::getColor(normal_text, this, "Select Color");
+    QColor color = QColorDialog::getColor(normal_text, this, "Select Color");
+    if (color.isValid()) normal_text=color;
     QPalette pal;
     pal.setColor(QPalette::Base,background);
     pal.setColor(QPalette::Text, normal_text);
@@ -133,7 +137,8 @@ void SettingsForm::on_pushButton_2_clicked()
 
 void SettingsForm::on_pushButton_4_clicked()
 {
-    keywords = QColorDialog::getColor(keywords, this, "Select Color");
+    QColor color = QColorDialog::getColor(keywords, this, "Select Color");
+    if (color.isValid()) keywords=color;
     QPalette pal;
     pal.setColor(QPalette::Base,background);
     pal.setColor(QPalette::Text, keywords);
@@ -142,7 +147,8 @@ void SettingsForm::on_pushButton_4_clicked()
 
 void SettingsForm::on_pushButton_6_clicked()
 {
-    preprocessor = QColorDialog::getColor(preprocessor, this, "Select Color");
+    QColor color = QColorDialog::getColor(preprocessor, this, "Select Color");
+    if (color.isValid()) preprocessor=color;
     QPalette pal;
     pal.setColor(QPalette::Base,background);
     pal.setColor(QPalette::Text, preprocessor);
@@ -151,7 +157,8 @@ void SettingsForm::on_pushButton_6_clicked()
 
 void SettingsForm::on_pushButton_8_clicked()
 {
-    functions = QColorDialog::getColor(functions, this, "Select Color");
+    QColor color = QColorDialog::getColor(functions, this, "Select Color");
+    if (color.isValid()) functions=color;
     QPalette pal;
     pal.setColor(QPalette::Base,background);
     pal.setColor(QPalette::Text, functions);
@@ -185,7 +192,8 @@ void SettingsForm::on_pushButton_12_clicked()
 
 void SettingsForm::on_pushButton_11_clicked()
 {
-    quotes = QColorDialog::getColor(quotes, this, "Select Color");
+    QColor color = QColorDialog::getColor(quotes, this, "Select Color");
+    if (color.isValid()) quotes=color;
     QPalette pal;
     pal.setColor(QPalette::Base,background);
     pal.setColor(QPalette::Text, quotes);
@@ -194,7 +202,8 @@ void SettingsForm::on_pushButton_11_clicked()
 
 void SettingsForm::on_pushButton_9_clicked()
 {
-    search_background = QColorDialog::getColor(search_background, this, "Select Color");
+    QColor color = QColorDialog::getColor(search_background, this, "Select Color");
+    if (color.isValid()) search_background=color;
     QPalette pal;
     pal.setColor(QPalette::Base,search_background);
     pal.setColor(QPalette::Text, search_text);
@@ -204,7 +213,8 @@ void SettingsForm::on_pushButton_9_clicked()
 
 void SettingsForm::on_pushButton_10_clicked()
 {
-    search_text = QColorDialog::getColor(search_text, this, "Select Color");
+    QColor color = QColorDialog::getColor(search_text, this, "Select Color");
+    if (color.isValid()) search_text=color;
     QPalette pal;
     pal.setColor(QPalette::Base,search_background);
     pal.setColor(QPalette::Text, search_text);
@@ -214,7 +224,8 @@ void SettingsForm::on_pushButton_10_clicked()
 
 void SettingsForm::on_pushButton_14_clicked()
 {
-    classes = QColorDialog::getColor(classes, this, "Select Color");
+    QColor color = QColorDialog::getColor(classes, this, "Select Color");
+    if (color.isValid()) classes=color;
     QPalette pal;
     pal.setColor(QPalette::Base,background);
     pal.setColor(QPalette::Text, classes);
