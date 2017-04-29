@@ -19,7 +19,6 @@ TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
     QFont font=QFont(reader->getFont());
     font.setPointSize(reader->getFontSize().toInt());
     this->setFont(font);
-    //connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     connect(this->document(), SIGNAL(contentsChanged()),this,SLOT(emitSize()));
     connect(this, SIGNAL(modificationChanged(bool)),this, SLOT(setMod(bool)));
     reader->readXml();
@@ -70,25 +69,6 @@ void TextEdit::resizeEvent(QResizeEvent *e)
     QRect cr = contentsRect();
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
     }
-}
-
-void TextEdit::highlightCurrentLine()
-{
-    QList<QTextEdit::ExtraSelection> extraSelections;
-
-    if (!isReadOnly()) {
-        QTextEdit::ExtraSelection selection;
-
-        QColor lineColor = QColor(Qt::yellow).lighter(180);
-
-        selection.format.setBackground(lineColor);
-        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-        selection.cursor = textCursor();
-        selection.cursor.clearSelection();
-        extraSelections.append(selection);
-    }
-
-    setExtraSelections(extraSelections);
 }
 
 void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
@@ -160,11 +140,7 @@ QString TextEdit::saveFile()
         this->document()->setModified(false);
         changeLang(file);
         QFileInfo info(file);
-        QDir temp=QDir::current();
-        QDir::setCurrent(info.absoluteDir().path());
-        system("git init");
-        system((QString("git add ")+info.fileName()).toLatin1());
-        QDir::setCurrent(temp.absolutePath());
+        addtogit(info);
         return info.fileName();
 }
 
@@ -205,11 +181,7 @@ QString TextEdit::saveFileAs()
         this->document()->setModified(false);
         changeLang(file);
         QFileInfo info(file);
-        QDir tempdir=QDir::current();
-        QDir::setCurrent(info.absoluteDir().path());
-        system("git init");
-        system((QString("git add ")+info.fileName()).toLatin1());
-        QDir::setCurrent(tempdir.absolutePath());
+        addtogit(info);
         return info.fileName();
 }
 QString TextEdit::openFile()
@@ -223,11 +195,7 @@ QString TextEdit::openFile()
             file.close();
             changeLang(file);
             QFileInfo info(file);
-            QDir temp=QDir::current();
-            QDir::setCurrent(info.absoluteDir().path());
-            system("git init");
-            system((QString("git add ")+info.fileName()).toLatin1());
-            QDir::setCurrent(temp.absolutePath());
+            addtogit(info);
             return info.fileName();
 }
 
@@ -243,3 +211,11 @@ void TextEdit::findText(QString str)
         else return;
 }
 
+void TextEdit::addtogit(QFileInfo & info)
+{
+    QDir tempdir=QDir::current();
+    QDir::setCurrent(info.absoluteDir().path());
+    system("git init");
+    system((QString("git add ")+info.fileName()).toLatin1());
+    QDir::setCurrent(tempdir.absolutePath());
+}

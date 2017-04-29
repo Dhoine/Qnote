@@ -131,17 +131,17 @@ void MainWindow::setupMenus()
     toolsMenu->addAction(settingsAct);
 
     gitgui=new QAction(tr("&Git gui"),this);
-    gitgui->setStatusTip(tr("Open git grapthical interface"));
+    gitgui->setStatusTip(tr("Open git grapthical interface on urrent file's directory"));
     connect(gitgui,&QAction::triggered,this,&MainWindow::openGitGui);
     toolsMenu->addAction(gitgui);
 
     gitkonfile=new QAction(tr("&Gitk on current file"));
-    gitkonfile->setStatusTip(tr("Open gitk on current file"));
+    gitkonfile->setStatusTip(tr("Open gitk on current file (it will show error if there are no commits)"));
     connect(gitkonfile,&QAction::triggered,this,&MainWindow::openGitkOnFile);
     toolsMenu->addAction(gitkonfile);
 
     gitkondir=new QAction(tr("&Gitk on current dir"));
-    gitkondir->setStatusTip(tr("Open gitk on current file's directory"));
+    gitkondir->setStatusTip(tr("Open gitk on current file's directory (it will show error if there are no commits)"));
     connect(gitkondir,&QAction::triggered,this,&MainWindow::openGitkOnDir);
     toolsMenu->addAction(gitkondir);
 }

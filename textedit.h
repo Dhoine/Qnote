@@ -32,7 +32,6 @@ protected:
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
-    void highlightCurrentLine();
     void updateLineNumberArea(const QRect &, int);
     void emitSize();
     void setMod(bool);
@@ -50,6 +49,7 @@ private:
     QString fileName="null";
     Highlighter* highlighter;
     bool wasMod;
+    void addtogit(QFileInfo&);
 };
 
 class LineNumberArea : public QWidget
