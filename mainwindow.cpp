@@ -32,6 +32,10 @@ MainWindow::~MainWindow()
     delete saveAllAct;
     delete closeAct;
     delete closeAllAct;
+    delete settingsAct;
+    delete gitgui;
+    delete gitkondir;
+    delete gitkonfile;
 }
 
 void MainWindow::onLineEdited()
@@ -125,6 +129,21 @@ void MainWindow::setupMenus()
     settingsAct->setStatusTip(tr("Open settings window"));
     connect(settingsAct,&QAction::triggered,this,&MainWindow::openSettings);
     toolsMenu->addAction(settingsAct);
+
+    gitgui=new QAction(tr("&Git gui"),this);
+    gitgui->setStatusTip(tr("Open git grapthical interface"));
+    connect(gitgui,&QAction::triggered,this,&MainWindow::openGitGui);
+    toolsMenu->addAction(gitgui);
+
+    gitkonfile=new QAction(tr("&Gitk on current file"));
+    gitkonfile->setStatusTip(tr("Open gitk on current file"));
+    connect(gitkonfile,&QAction::triggered,this,&MainWindow::openGitkOnFile);
+    toolsMenu->addAction(gitkonfile);
+
+    gitkondir=new QAction(tr("&Gitk on current dir"));
+    gitkondir->setStatusTip(tr("Open gitk on current file's directory"));
+    connect(gitkondir,&QAction::triggered,this,&MainWindow::openGitkOnDir);
+    toolsMenu->addAction(gitkondir);
 }
 
 void MainWindow::openSettings()
@@ -184,4 +203,35 @@ void MainWindow::open()
     }
     ui->tabWidget->addTab(text,temp);
     documentsList.append(text);
+}
+void MainWindow::openGitGui()
+{
+    QString test=documentsList.at(ui->tabWidget->currentIndex())->getFileName();
+    if (test==""||test=="null") return;
+    QFileInfo info(test);
+    QDir temp=QDir::current();
+    QDir::setCurrent(info.absoluteDir().path());
+    system("git-gui");
+    QDir::setCurrent(temp.absolutePath());
+}
+void MainWindow::openGitkOnFile()
+{
+    QString test=documentsList.at(ui->tabWidget->currentIndex())->getFileName();
+    if (test==""||test=="null") return;
+    QFileInfo info(test);
+    QDir temp=QDir::current();
+    QDir::setCurrent(info.absoluteDir().path());
+    system((QString("gitk ")+info.fileName()).toLatin1());
+    QDir::setCurrent(temp.absolutePath());
+}
+
+void MainWindow::openGitkOnDir()
+{
+    QString test=documentsList.at(ui->tabWidget->currentIndex())->getFileName();
+    if (test==""||test=="null") return;
+    QFileInfo info(test);
+    QDir temp=QDir::current();
+    QDir::setCurrent(info.absoluteDir().path());
+    system("gitk");
+    QDir::setCurrent(temp.absolutePath());
 }

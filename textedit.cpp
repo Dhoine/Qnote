@@ -160,7 +160,17 @@ QString TextEdit::saveFile()
         this->document()->setModified(false);
         changeLang(file);
         QFileInfo info(file);
+        QDir temp=QDir::current();
+        QDir::setCurrent(info.absoluteDir().path());
+        system("git init");
+        system((QString("git add ")+info.fileName()).toLatin1());
+        QDir::setCurrent(temp.absolutePath());
         return info.fileName();
+}
+
+QString TextEdit::getFileName()
+{
+    return fileName;
 }
 
 void TextEdit::changeLang(QFile &file)
@@ -195,6 +205,11 @@ QString TextEdit::saveFileAs()
         this->document()->setModified(false);
         changeLang(file);
         QFileInfo info(file);
+        QDir tempdir=QDir::current();
+        QDir::setCurrent(info.absoluteDir().path());
+        system("git init");
+        system((QString("git add ")+info.fileName()).toLatin1());
+        QDir::setCurrent(tempdir.absolutePath());
         return info.fileName();
 }
 QString TextEdit::openFile()
@@ -208,6 +223,11 @@ QString TextEdit::openFile()
             file.close();
             changeLang(file);
             QFileInfo info(file);
+            QDir temp=QDir::current();
+            QDir::setCurrent(info.absoluteDir().path());
+            system("git init");
+            system((QString("git add ")+info.fileName()).toLatin1());
+            QDir::setCurrent(temp.absolutePath());
             return info.fileName();
 }
 

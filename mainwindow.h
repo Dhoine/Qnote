@@ -35,6 +35,9 @@ private:
     QAction *closeAct;
     QAction *closeAllAct;
     QAction *settingsAct;
+    QAction *gitgui;
+    QAction *gitkonfile;
+    QAction *gitkondir;
     QTimer *typingTimer;
     SettingsForm settings;
 
@@ -51,6 +54,9 @@ private slots:
     void closeAll();
     void find();
     void openSettings();
+    void openGitGui();
+    void openGitkOnFile();
+    void openGitkOnDir();
 };
 
 #endif // MAINWINDOW_H

@@ -25,6 +25,7 @@ public:
     void findText(QString);
     void clearBackground();
     void changeLang(QFile&);
+    QString getFileName();
     virtual ~TextEdit();
 protected:
     void resizeEvent(QResizeEvent *event);
