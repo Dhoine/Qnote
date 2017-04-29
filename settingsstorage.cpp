@@ -25,7 +25,6 @@ void SettingsStorage::readXml()
     search_text_color.clear();
     quotes_color.clear();
     classes_color.clear();
-    path.clear();
     xmlReader.setDevice(&input);
     xmlReader.readNextStartElement();
     xmlReader.readNextStartElement();
@@ -66,11 +65,6 @@ void SettingsStorage::readXml()
             quotes_color.append(xmlReader.readElementText());
             xmlReader.readNextStartElement();
             classes_color.append(xmlReader.readElementText());
-            xmlReader.readNextStartElement();
-            xmlReader.readNextStartElement();
-            xmlReader.readNextStartElement();
-            xmlReader.readNextStartElement();
-            path.append(xmlReader.readElementText());
     input.close();
 }
 
@@ -105,9 +99,6 @@ void SettingsStorage::saveSettings()
     xmlWriter.writeTextElement("quotes_color",quotes_color);
     xmlWriter.writeTextElement("classes_color",classes_color);
     xmlWriter.writeEndElement();
-    xmlWriter.writeEndElement();
-    xmlWriter.writeStartElement("git");
-    xmlWriter.writeTextElement("PATH",path);
     xmlWriter.writeEndElement();
     xmlWriter.writeEndElement();
     xmlWriter.writeEndDocument();
@@ -257,15 +248,7 @@ void SettingsStorage::setQuotesColor(QString str)
 {
     quotes_color=str;
 }
-QString SettingsStorage::getPath()
-{
-    return path;
-}
 
-void SettingsStorage::setPath(QString str)
-{
-    path=str;
-}
 QString SettingsStorage::getClassesColor()
 {
     return classes_color;

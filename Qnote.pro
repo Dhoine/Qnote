@@ -37,5 +37,6 @@ RESOURCES +=
 
 DISTFILES += \
     settings.xml \
-    C,C++.xml
+    C,C++.xml \
+    README.md
 

@@ -13,7 +13,7 @@ class SettingsStorage
     SettingsStorage();
     QString font,font_size,line_wrap_mode,line_numeration,
              background_color,controlflow_color,keywords_color,
-             types_color,preprocessor_color,path,lang,functions_color,
+             types_color,preprocessor_color,lang,functions_color,
              search_background_color,comments_color, normal_text_color,
              search_text_color, quotes_color,classes_color;
 public:
@@ -23,7 +23,7 @@ public:
         return s;
     }
     SettingsStorage(SettingsStorage const&) = delete;
-    void operator =(SettingsStorage const&)=delete;
+    void operator =(SettingsStorage const&) = delete;
     void saveSettings();
     void readXml();
     QString getFont();
@@ -35,7 +35,6 @@ public:
     QString getKeywordsColor();
     QString getTypesColor();
     QString getPreprocessorColor();
-    QString getPath();
     QString getLang();
     QString getFunctionColor();
     QString getSearchBackgroundColor();
@@ -54,7 +53,6 @@ public:
     void setKeywordsColor(QString);
     void setTypesColor(QString);
     void setPreprocessorColor(QString);
-    void setPath(QString);
     void setLang(QString);
     void setFunctionColor(QString);
     void setSearchBackgroundColor(QString);
