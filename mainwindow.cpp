@@ -8,8 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setupMenus();
-    Reader *reader=&Reader::Instance();
-    reader->readXml();
     typingTimer = new QTimer( this );
     typingTimer->setSingleShot( true );
     connect( typingTimer, &QTimer::timeout, this, &MainWindow::find);

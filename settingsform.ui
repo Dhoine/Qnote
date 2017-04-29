@@ -143,7 +143,7 @@
           <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Language:</string>
+             <string>Default highlighting language for new documents:</string>
             </property>
            </widget>
           </item>

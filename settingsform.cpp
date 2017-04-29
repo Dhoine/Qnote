@@ -118,7 +118,7 @@ void SettingsForm::on_pushButton_5_clicked()
 void SettingsForm::on_pushButton_7_clicked()
 {
     QColor color = QColorDialog::getColor(comments, this, "Select Color");
-    if (color.isValid()) background=color;
+    if (color.isValid()) comments=color;
     QPalette pal;
     pal.setColor(QPalette::Base,background);
     pal.setColor(QPalette::Text, comments);
@@ -167,7 +167,7 @@ void SettingsForm::on_pushButton_8_clicked()
 
 void SettingsForm::on_pushButton_12_clicked()
 {
-    QString MESSAGE("You need to restart the app to apply settings.");
+    QString MESSAGE("New settings won't be applied to alredy opened text fields. \nYou need to close them and reopen manually");
     QMessageBox::information(this, tr("Apply settings"), MESSAGE);
     SettingsStorage *reader=&SettingsStorage::Instance();
     reader->setFont(ui->fontComboBox->currentFont().family());

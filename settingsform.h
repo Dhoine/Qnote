@@ -48,10 +48,6 @@ private slots:
 
     void on_pushButton_13_clicked();
 
-    void on_fontComboBox_currentTextChanged(const QString &arg1);
-
-    void on_fontComboBox_activated(const QString &arg1);
-
     void on_spinBox_valueChanged(int arg1);
 
     void on_fontComboBox_currentFontChanged(const QFont &f);

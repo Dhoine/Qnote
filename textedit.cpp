@@ -22,6 +22,7 @@ TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
     //connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     connect(this->document(), SIGNAL(contentsChanged()),this,SLOT(emitSize()));
     connect(this, SIGNAL(modificationChanged(bool)),this, SLOT(setMod(bool)));
+    reader->readXml();
     highlighter = new Highlighter(this->document());
     QPalette pal;
     pal.setColor(QPalette::Base,QColor(reader->getBackgroundColor()));
@@ -149,7 +150,7 @@ TextEdit::~TextEdit()
 QString TextEdit::saveFile()
 {
     if (fileName=="null"||fileName=="")
-        fileName=QFileDialog::getSaveFileName(this, tr("Save File"), "", tr("C/C++ file (*.c *.cpp *.h)"));
+        fileName=QFileDialog::getSaveFileName(this, tr("Save File"), "", tr("C/C++ files (*.c *.cpp *.h);;Java files (*.java);;C# files (*.cs)"));
     if (fileName=="") return "null";
     QFile file(fileName);
         file.open(QIODevice::WriteOnly);
@@ -157,13 +158,34 @@ QString TextEdit::saveFile()
         out << this->toPlainText();
         file.close();
         this->document()->setModified(false);
-        return fileName;
+        changeLang(file);
+        QFileInfo info(file);
+        return info.fileName();
+}
+
+void TextEdit::changeLang(QFile &file)
+{
+    QFileInfo inf(file);
+    SettingsStorage *reader=&SettingsStorage::Instance();
+    if (inf.suffix()=="cpp"||inf.suffix()=="c"||inf.suffix()=="h")
+    {
+        reader->setLang("C,C++");
+    } else if (inf.suffix()=="java")
+    {
+        reader->setLang("Java");
+    } else if (inf.suffix()=="cs")
+    {
+        reader->setLang("C#");
+    }
+
+    delete highlighter;
+    highlighter=new Highlighter(this->document());
 }
 
 QString TextEdit::saveFileAs()
 {
     QString temp=fileName;
-        fileName=QFileDialog::getSaveFileName(this, tr("Save File"), "", tr("C/C++ file (*.c *.cpp *.h)"));
+        fileName=QFileDialog::getSaveFileName(this, tr("Save File"), "", tr("C/C++ files (*.c *.cpp *.h);;Java files (*.java);;C# files (*.cs)"));
         if (fileName=="") return temp;
     QFile file(fileName);
         file.open(QIODevice::WriteOnly);
@@ -171,18 +193,22 @@ QString TextEdit::saveFileAs()
         out << this->toPlainText();
         file.close();
         this->document()->setModified(false);
-        return fileName;
+        changeLang(file);
+        QFileInfo info(file);
+        return info.fileName();
 }
 QString TextEdit::openFile()
 {
-        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("C/C++ Files (*.c *.cpp *.h)"));
+        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("C/C++ files (*.c *.cpp *.h);;Java files (*.java);;C# files (*.cs)"));
 
             QFile file(fileName);
             file.open(QIODevice::ReadOnly);
             QTextStream in(&file);
             this->setPlainText(in.readAll());
             file.close();
-            return fileName;
+            changeLang(file);
+            QFileInfo info(file);
+            return info.fileName();
 }
 
 void TextEdit::findText(QString str)

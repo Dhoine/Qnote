@@ -18,6 +18,7 @@ Highlighter::Highlighter(QTextDocument *parent)
     searchRule.pattern=QRegExp("sdgfsdgsdfhsdfhaehaerhaefhsfdhsdhsd");
     HighlightingRule rule;
     Reader *xmlReader=&Reader::Instance();
+    xmlReader->readXml();
     lists=xmlReader->getlists();
     controlFormat.setForeground(QColor(reader->getControlflowColor()));
     controlFormat.setFontWeight(QFont::Bold);
@@ -46,7 +47,13 @@ Highlighter::Highlighter(QTextDocument *parent)
     preprocessorFormat.setForeground(QColor(reader->getPreprocessorColor()));
     preprocessorFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, lists[3]) {
-        rule.pattern = QRegExp("\\b*#"+pattern+"? ?([A-Za-z0-9_<>.]+)? ?([A-Za-z0-9_<>.]+)\\b");
+        if (!(reader->getLang()=="Java"))
+        {
+            rule.pattern = QRegExp("\\b*#"+pattern+"? ?([A-Za-z0-9_<>.]+)? ?([A-Za-z0-9_<>.]+)\\b");
+        } else
+        {
+            rule.pattern= QRegExp("\\b"+pattern+"? ?([A-Za-z0-9_<>.]+)? ?([A-Za-z0-9_<>.]+)\\b");
+        }
         rule.format = preprocessorFormat;
         highlightingRules.append(rule);
     }

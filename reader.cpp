@@ -9,6 +9,13 @@ void Reader::readXml()
     QXmlStreamReader xmlReader;
     SettingsStorage *reader=&SettingsStorage::Instance();
     QFile input(QDir::currentPath()+"\\"+reader->getLang()+".xml");
+    if (!lists[0].isEmpty())
+    {
+        lists[0].clear();
+        lists[1].clear();
+        lists[2].clear();
+        lists[3].clear();
+    }
     if (!input.open(QFile::ReadOnly)) return;
     xmlReader.setDevice(&input);
     xmlReader.readNextStartElement();
