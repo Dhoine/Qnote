@@ -40,6 +40,17 @@ private:
     QAction *gitkondir;
     QTimer *typingTimer;
     SettingsForm settings;
+    static void gitkonFile(QFileInfo info)
+    {
+        QDir::setCurrent(info.absoluteDir().path());
+        QString test=QString("gitk ")+info.fileName();
+        system((QString("gitk ")+info.fileName()).toLatin1());
+    }
+    static void gitkonDir(QFileInfo info)
+    {
+        QDir::setCurrent(info.absoluteDir().path());
+        system("gitk");
+    }
 
 private slots:
     void deleteTab(int);

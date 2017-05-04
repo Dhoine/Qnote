@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <thread>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -206,6 +207,7 @@ void MainWindow::open()
 }
 void MainWindow::openGitGui()
 {
+    if (documentsList.isEmpty()) return;
     QString test=documentsList.at(ui->tabWidget->currentIndex())->getFileName();
     if (test==""||test=="null") return;
     QFileInfo info(test);
@@ -216,22 +218,25 @@ void MainWindow::openGitGui()
 }
 void MainWindow::openGitkOnFile()
 {
+    if (documentsList.isEmpty()) return;
     QString test=documentsList.at(ui->tabWidget->currentIndex())->getFileName();
     if (test==""||test=="null") return;
     QFileInfo info(test);
     QDir temp=QDir::current();
-    QDir::setCurrent(info.absoluteDir().path());
-    system((QString("gitk ")+info.fileName()).toLatin1());
+    //system((QString("gitk ")+info.fileName()).toLatin1());
+    std::thread gitk(gitkonFile,info);
+    gitk.detach();
     QDir::setCurrent(temp.absolutePath());
 }
 
 void MainWindow::openGitkOnDir()
 {
+    if (documentsList.isEmpty()) return;
     QString test=documentsList.at(ui->tabWidget->currentIndex())->getFileName();
     if (test==""||test=="null") return;
     QFileInfo info(test);
     QDir temp=QDir::current();
-    QDir::setCurrent(info.absoluteDir().path());
-    system("gitk");
+    std::thread gitk(gitkonDir,info);
+    gitk.detach();
     QDir::setCurrent(temp.absolutePath());
 }
