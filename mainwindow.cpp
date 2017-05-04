@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     typingTimer = new QTimer( this );
     typingTimer->setSingleShot( true );
     connect( typingTimer, &QTimer::timeout, this, &MainWindow::find);
-    connect(ui->lineEdit, QLineEdit::textChanged, this, &MainWindow::onLineEdited );
+    connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(onLineEdited()) );
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(deleteTab(int)));
     connect(ui->lineEdit,SIGNAL(returnPressed()),this,SLOT(find()));
     connect(ui->findButton,SIGNAL(clicked(bool)),this,SLOT(find()));

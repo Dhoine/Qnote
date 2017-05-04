@@ -6,7 +6,7 @@ SettingsStorage::SettingsStorage()
 void SettingsStorage::readXml()
 {
     QXmlStreamReader xmlReader;
-    QFile input(QDir::currentPath()+"\\settings.xml");
+    QFile input("settings.xml");
     if (!input.open(QFile::ReadOnly)) return;
     font.clear();
     font_size.clear();
@@ -71,7 +71,7 @@ void SettingsStorage::readXml()
 void SettingsStorage::saveSettings()
 {
     QXmlStreamWriter xmlWriter;
-    QFile output(QDir::currentPath()+"\\settings.xml");
+    QFile output("settings.xml");
     if (!output.open(QFile::WriteOnly|QFile::Truncate)) return;
     xmlWriter.setDevice(&output);
     xmlWriter.setAutoFormatting(true);

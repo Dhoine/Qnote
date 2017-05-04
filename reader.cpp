@@ -8,7 +8,7 @@ void Reader::readXml()
 {
     QXmlStreamReader xmlReader;
     SettingsStorage *reader=&SettingsStorage::Instance();
-    QFile input(QDir::currentPath()+"\\"+reader->getLang()+".xml");
+    QFile input(reader->getLang()+".xml");
     if (!lists[0].isEmpty())
     {
         lists[0].clear();
