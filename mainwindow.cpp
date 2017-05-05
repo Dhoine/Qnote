@@ -213,7 +213,11 @@ void MainWindow::openGitGui()
     QFileInfo info(test);
     QDir temp=QDir::current();
     QDir::setCurrent(info.absoluteDir().path());
+#ifdef __Win32
     system("git-gui");
+#elif __linux
+    system("git gui");
+#endif
     QDir::setCurrent(temp.absolutePath());
 }
 void MainWindow::openGitkOnFile()

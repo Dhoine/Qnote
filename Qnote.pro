@@ -38,5 +38,7 @@ RESOURCES +=
 DISTFILES += \
     settings.xml \
     C,C++.xml \
-    README.md
+    README.md \
+    C#.xml \
+    Java.xml
 

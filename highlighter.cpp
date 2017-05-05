@@ -49,10 +49,10 @@ Highlighter::Highlighter(QTextDocument *parent)
     foreach (const QString &pattern, lists[3]) {
         if (!(reader->getLang()=="Java"))
         {
-            rule.pattern = QRegExp("\\b*#"+pattern+"? ?([A-Za-z0-9_<>.]+)? ?([A-Za-z0-9_<>.]+)\\b");
+            rule.pattern = QRegExp("\\b*#"+pattern);
         } else
         {
-            rule.pattern= QRegExp("\\b"+pattern+"? ?([A-Za-z0-9_<>.]+)? ?([A-Za-z0-9_<>.]+)\\b");
+            rule.pattern= QRegExp("\\b"+pattern+"\\b");
         }
         rule.format = preprocessorFormat;
         highlightingRules.append(rule);
