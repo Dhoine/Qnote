@@ -43,6 +43,16 @@
       <item>true</item>
       <item>try</item>
       <item>volatile</item>
+      <item>@Deprecated</item>
+      <item>@Override</item>
+      <item>@SuppressWarnings</item>
+      <item>@SafeVarargs</item>
+      <item>@FunctionalInterface</item>
+      <item>@Retention</item>
+      <item>@Documented</item>
+      <item>@Target</item>
+      <item>@Inherited</item>
+      <item>@Repeatable</item>
     </keywords>
     <types>
       <item>boolean</item>

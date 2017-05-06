@@ -31,7 +31,7 @@ Highlighter::Highlighter(QTextDocument *parent)
     keywordFormat.setForeground(QColor(reader->getKeywordsColor()));
     keywordFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, lists[1]) {
-        rule.pattern = QRegExp("\\b"+pattern+"\\b");
+        rule.pattern = QRegExp(pattern+"\\b");
         rule.format = keywordFormat;
         highlightingRules.append(rule);
     }
