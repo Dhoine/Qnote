@@ -7,10 +7,10 @@ TextEdit::TextEdit(QWidget *parent):QPlainTextEdit(parent)
     SettingsStorage *reader=&SettingsStorage::Instance();
     if (reader->getLineNumeration()=="1")
     {
-    lineNumberArea = new LineNumberArea(this);
-    connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
-    connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
-    updateLineNumberAreaWidth(0);
+        lineNumberArea = new LineNumberArea(this);
+        connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
+        connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
+        updateLineNumberAreaWidth(0);
     }
     if(reader->getLineWrapMode()!="1")
     {
@@ -64,10 +64,10 @@ void TextEdit::resizeEvent(QResizeEvent *e)
     SettingsStorage *reader=&SettingsStorage::Instance();
     if (reader->getLineNumeration()=="1")
     {
-    QPlainTextEdit::resizeEvent(e);
+        QPlainTextEdit::resizeEvent(e);
 
-    QRect cr = contentsRect();
-    lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+        QRect cr = contentsRect();
+        lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
     }
 }
 
@@ -109,20 +109,20 @@ TextEdit::~TextEdit()
 {
     if (this->isMod && !(this->document()->characterCount()==1 && (this->fileName=="null"||this->fileName=="")))
     {
-    QMessageBox msgBox;
-    msgBox.setText("The document has been modified.");
-    msgBox.setInformativeText("Do you want to save your changes?");
-    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard);
-    msgBox.setDefaultButton(QMessageBox::Save);
-    int ret = msgBox.exec();
-    if (ret==QMessageBox::Save)
-        saveFile();
+        QMessageBox msgBox;
+        msgBox.setText("The document has been modified.");
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+        if (ret==QMessageBox::Save)
+            saveFile();
     }
     delete highlighter;
     SettingsStorage *reader=&SettingsStorage::Instance();
     if (reader->getLineNumeration()=="1")
     {
-    delete lineNumberArea;
+        delete lineNumberArea;
     }
     emit textChanged(1,0);
 }
@@ -133,15 +133,15 @@ QString TextEdit::saveFile()
         fileName=QFileDialog::getSaveFileName(this, tr("Save File"), "", tr("C/C++ files (*.c *.cpp *.h);;Java files (*.java);;C# files (*.cs)"));
     if (fileName=="") return "null";
     QFile file(fileName);
-        file.open(QIODevice::WriteOnly);
-        QTextStream out(&file);
-        out << this->toPlainText();
-        file.close();
-        this->document()->setModified(false);
-        changeLang(file);
-        QFileInfo info(file);
-        addtogit(info);
-        return info.fileName();
+    file.open(QIODevice::WriteOnly);
+    QTextStream out(&file);
+    out << this->toPlainText();
+    file.close();
+    this->document()->setModified(false);
+    changeLang(file);
+    QFileInfo info(file);
+    addtogit(info);
+    return info.fileName();
 }
 
 QString TextEdit::getFileName()
@@ -171,44 +171,44 @@ void TextEdit::changeLang(QFile &file)
 QString TextEdit::saveFileAs()
 {
     QString temp=fileName;
-        fileName=QFileDialog::getSaveFileName(this, tr("Save File"), "", tr("C/C++ files (*.c *.cpp *.h);;Java files (*.java);;C# files (*.cs)"));
-        if (fileName=="") return temp;
+    fileName=QFileDialog::getSaveFileName(this, tr("Save File"), "", tr("C/C++ files (*.c *.cpp *.h);;Java files (*.java);;C# files (*.cs)"));
+    if (fileName=="") return temp;
     QFile file(fileName);
-        file.open(QIODevice::WriteOnly);
-        QTextStream out(&file);
-        out << this->toPlainText();
-        file.close();
-        this->document()->setModified(false);
-        changeLang(file);
-        QFileInfo info(file);
-        addtogit(info);
-        return info.fileName();
+    file.open(QIODevice::WriteOnly);
+    QTextStream out(&file);
+    out << this->toPlainText();
+    file.close();
+    this->document()->setModified(false);
+    changeLang(file);
+    QFileInfo info(file);
+    addtogit(info);
+    return info.fileName();
 }
 QString TextEdit::openFile()
 {
-        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("C/C++ files (*.c *.cpp *.h);;Java files (*.java);;C# files (*.cs)"));
+    fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("C/C++ files (*.c *.cpp *.h);;Java files (*.java);;C# files (*.cs)"));
 
-            QFile file(fileName);
-            file.open(QIODevice::ReadOnly);
-            QTextStream in(&file);
-            this->setPlainText(in.readAll());
-            file.close();
-            changeLang(file);
-            QFileInfo info(file);
-            addtogit(info);
-            return info.fileName();
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QTextStream in(&file);
+    this->setPlainText(in.readAll());
+    file.close();
+    changeLang(file);
+    QFileInfo info(file);
+    addtogit(info);
+    return info.fileName();
 }
 
 void TextEdit::findText(QString str)
 {
     highlighter->setWord(str);
-        bool found=this->find(str);
-        if (!found)
-        {
-            this->moveCursor(QTextCursor::Start);
-            found=find(str);
-        }
-        else return;
+    bool found=this->find(str);
+    if (!found)
+    {
+        this->moveCursor(QTextCursor::Start);
+        found=find(str);
+    }
+    else return;
 }
 
 void TextEdit::addtogit(QFileInfo & info)

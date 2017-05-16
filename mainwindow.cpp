@@ -108,7 +108,7 @@ void MainWindow::setupMenus()
     closeAct=new QAction(tr("&Close"),this);
     closeAct->setShortcut(QKeySequence::Close);
     closeAct->setStatusTip(tr("Close current document"));
-    connect(closeAct,&QAction::triggered ,this,&MainWindow::close);
+    connect(closeAct,&QAction::triggered,this,&MainWindow::close);
 
     closeAllAct=new QAction(tr("&Close all"),this);
     closeAllAct->setStatusTip(tr("Close all documents"));
@@ -155,7 +155,7 @@ void MainWindow::openSettings()
 void MainWindow::closeAll()
 {
     int temp=ui->tabWidget->count();
-    for(int i=0;i<temp;i++)
+    for(int i=0; i<temp; i++)
         close();
 }
 
@@ -188,8 +188,8 @@ void MainWindow::saveAs()
 void MainWindow::saveAll()
 {
     if (documentsList.isEmpty()) return;
-    for (int i=0; i<ui->tabWidget->count();i++)
-    ui->tabWidget->setTabText(i,documentsList[i]->saveFile());
+    for (int i=0; i<ui->tabWidget->count(); i++)
+        ui->tabWidget->setTabText(i,documentsList[i]->saveFile());
 }
 
 void MainWindow::open()
@@ -227,7 +227,6 @@ void MainWindow::openGitkOnFile()
     if (test==""||test=="null") return;
     QFileInfo info(test);
     QDir temp=QDir::current();
-    //system((QString("gitk ")+info.fileName()).toLatin1());
     std::thread gitk(gitkonFile,info);
     gitk.detach();
     QDir::setCurrent(temp.absolutePath());
