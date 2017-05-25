@@ -171,18 +171,24 @@ void MainWindow::newFile()
     connect(text,SIGNAL(textChanged(int,int)),this,SLOT(changeCounter(int,int)));
     ui->tabWidget->addTab(text,"New file");
     documentsList.append(text);
+    ui->tabWidget->setCurrentWidget(text);
+    text->setFocus();
 }
 
 void MainWindow::save()
 {
     if (documentsList.isEmpty()) return;
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),documentsList[ui->tabWidget->currentIndex()]->saveFile());
+    this->activateWindow();
+    documentsList[ui->tabWidget->currentIndex()]->setFocus();
 }
 
 void MainWindow::saveAs()
 {
     if (documentsList.isEmpty()) return;
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),documentsList[ui->tabWidget->currentIndex()]->saveFileAs());
+    this->activateWindow();
+    documentsList[ui->tabWidget->currentIndex()]->setFocus();
 }
 
 void MainWindow::saveAll()
@@ -190,6 +196,8 @@ void MainWindow::saveAll()
     if (documentsList.isEmpty()) return;
     for (int i=0; i<ui->tabWidget->count(); i++)
         ui->tabWidget->setTabText(i,documentsList[i]->saveFile());
+    this->activateWindow();
+    documentsList[ui->tabWidget->currentIndex()]->setFocus();
 }
 
 void MainWindow::open()
@@ -203,7 +211,10 @@ void MainWindow::open()
         return;
     }
     ui->tabWidget->addTab(text,temp);
+    ui->tabWidget->setCurrentWidget(text);
     documentsList.append(text);
+    this->activateWindow();
+    text->setFocus();
 }
 void MainWindow::openGitGui()
 {
