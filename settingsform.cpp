@@ -67,7 +67,7 @@ SettingsForm::~SettingsForm()
 
 void SettingsForm::on_pushButton_clicked()
 {
-    const QColor color = QColorDialog::getColor(Qt::green, this, "Select Color");
+    const QColor color = QColorDialog::getColor(background, this, "Select Color");
     QPalette palette;
     palette.setColor(QPalette::Base,color);
     if(color.isValid())
@@ -91,8 +91,8 @@ void SettingsForm::on_pushButton_clicked()
         ui->textBrowser_11->setPalette(palette);
         palette.setColor(QPalette::Text,classes);
         ui->textBrowser_12->setPalette(palette);
+        background=color;
     }
-    background=color;
 }
 
 void SettingsForm::on_pushButton_3_clicked()
